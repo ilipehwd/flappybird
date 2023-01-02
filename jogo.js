@@ -3,8 +3,8 @@ sprites.src = './sprites.png';
 
 const canvas = document.querySelector('#game-canvas');
 const contexto = canvas.getContext('2d');
-const som_punch = new Audio();
-som_punch.src = './som/punch.wav';
+const som_morte = new Audio();
+som_morte.src = './som/wasted.mp3';
 
 
 const flappyBird = {
@@ -31,18 +31,20 @@ const flappyBird = {
     velocidade: 0,
     atualiza() {
         if (fazcolisao()) {
-            som_punch.play();
+            som_morte.play();
             telaativa = telainicio;
             return;
         }
-        flappyBird.Y = flappyBird.y + 1
+        flappyBird.y = flappyBird.y + 1
         flappyBird.velocidade += flappyBird.gravidade;
         flappyBird.y = flappyBird.y + flappyBird.velocidade;
     }
 }
 
 function fazcolisao() {
-
+    if(flappyBird.y + flappyBird.altura > chao.y){
+        return true;
+    }
 }
 
 const planodefundo = {
