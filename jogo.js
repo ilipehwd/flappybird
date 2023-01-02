@@ -145,8 +145,8 @@ function mudatelaativa() {
 window.addEventListener('click', mudatelaativa);
 
 function loop() {
-    contexto.Style = '#00FFFF';
-    contexto.fillRect(0, 0, canvas.width, canvas.height)
+    contexto.fillStyle = '#00FFFF';
+    contexto.fillRect(0, 0, canvas.width, canvas.height);
     flappyBird.desenha();
     planodefundo.desenha();
     chao.desenha();
