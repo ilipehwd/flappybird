@@ -6,12 +6,14 @@ const contexto = canvas.getContext('2d');
 const som_morte = new Audio();
 som_morte.src = './som/wasted.mp3';
 
+let animation_frame = 0;
+
 
 const flappyBird = {
     spriteX: 0,
     spriteY: 0,
-    largura: 64,
-    altura: 21,
+    largura: 35,
+    altura: 25,
     x: 10,
     y: 50,
     pulo: 4.6,
@@ -38,7 +40,22 @@ const flappyBird = {
         flappyBird.y = flappyBird.y + 1
         flappyBird.velocidade += flappyBird.gravidade;
         flappyBird.y = flappyBird.y + flappyBird.velocidade;
-    }
+        flappyBird.atualizaframe();
+    },
+    frameatual:0,
+    atualizaframe(){
+        if((animation_frame % 10) === 0){
+        flappyBird.frameatual = flappyBird.frameatual + 1;
+        flappyBird.frameatual = flappyBird.frameatual % flappyBird.movimentos.length;
+        flappyBird.spriteX = flappyBird.movimentos[flappyBird.frameatual].spriteX;
+        flappyBird.spriteY = flappyBird.movimentos[flappyBird.frameatual].spriteY;
+    }},
+    movimentos: [
+        {spriteX: 0, spriteY: 0,},
+        {spriteX: 0, spriteY: 26,},
+        {spriteX: 0, spriteY: 52,},
+        {spriteX: 0, spriteY: 26,},
+    ]
 }
 
 function fazcolisao() {
@@ -69,6 +86,10 @@ const planodefundo = {
             planodefundo.x + planodefundo.largura, planodefundo.y,
             planodefundo.largura, planodefundo.altura,
         );
+    },
+    atualiza(){
+        planodefundo.x = planodefundo.x - 0.4;
+        planodefundo.x = planodefundo.x % (planodefundo.largura / 1.182);
     }
 }
 const chao = {
@@ -93,7 +114,11 @@ const chao = {
             chao.x + chao.largura, chao.y,
             chao.largura, chao.altura,
         );
-    }
+    },
+    atualiza(){
+        chao.x = chao.x - 1;
+        chao.x = chao.x % (chao.largura / 2);
+    },
 }
 const inicio = {
     spriteX: 130,
@@ -128,8 +153,10 @@ const telajogo = {
     desenha() {
         planodefundo.desenha();
         chao.desenha();
+        chao.atualiza();
         flappyBird.desenha();
         flappyBird.atualiza();
+        planodefundo.atualiza();
     },
     click() {
         flappyBird.pula();
@@ -147,11 +174,9 @@ window.addEventListener('click', mudatelaativa);
 function loop() {
     contexto.fillStyle = '#00FFFF';
     contexto.fillRect(0, 0, canvas.width, canvas.height);
-    flappyBird.desenha();
-    planodefundo.desenha();
-    chao.desenha();
     telaativa.desenha();
     requestAnimationFrame(loop);
+    
 }
 
 
