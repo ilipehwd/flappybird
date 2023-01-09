@@ -4,7 +4,7 @@ sprites.src = './sprites.png';
 const canvas = document.querySelector('#game-canvas');
 const contexto = canvas.getContext('2d');
 const som_morte = new Audio();
-som_morte.src = './som/wasted.mp3';
+som_morte.src = './som/punch.wav';
 
 let animation_frame = 0;
 
@@ -86,10 +86,58 @@ const planodefundo = {
             planodefundo.x + planodefundo.largura, planodefundo.y,
             planodefundo.largura, planodefundo.altura,
         );
+        contexto.drawImage(
+            sprites,
+            planodefundo.spriteX, planodefundo.spriteY,
+            planodefundo.largura, planodefundo.altura,
+            planodefundo.x + planodefundo.largura * 2, planodefundo.y,
+            planodefundo.largura, planodefundo.altura,
+        );
     },
     atualiza(){
-        planodefundo.x = planodefundo.x - 0.4;
-        planodefundo.x = planodefundo.x % (planodefundo.largura / 1.182);
+        planodefundo.x = planodefundo.x - 0.5;
+        if(planodefundo.x == -planodefundo.largura){
+            planodefundo.x = 0
+        }
+
+    }
+}
+const planodefundo2 = {
+    spriteX: 390,
+    spriteY: 0,
+    largura: 275,
+    altura: 205,
+    x: 0,
+    y: canvas.height - 205,
+    desenha() {
+        contexto.drawImage(
+            sprites,
+            planodefundo.spriteX, planodefundo.spriteY,
+            planodefundo.largura, planodefundo.altura,
+            planodefundo.x, planodefundo.y,
+            planodefundo.largura, planodefundo.altura,
+        );
+        contexto.drawImage(
+            sprites,
+            planodefundo.spriteX, planodefundo.spriteY,
+            planodefundo.largura, planodefundo.altura,
+            planodefundo.x + planodefundo.largura * 2, planodefundo.y,
+            planodefundo.largura, planodefundo.altura,
+        );
+        contexto.drawImage(
+            sprites,
+            planodefundo.spriteX, planodefundo.spriteY,
+            planodefundo.largura, planodefundo.altura,
+            planodefundo.x + planodefundo.largura, planodefundo.y,
+            planodefundo.largura, planodefundo.altura,
+        );
+    },
+    atualiza(){
+        planodefundo.x = planodefundo.x - 0.5;
+        if(planodefundo.x == -planodefundo.largura){
+            planodefundo.x = 0
+        }
+
     }
 }
 const chao = {
@@ -152,11 +200,11 @@ const telainicio = {
 const telajogo = {
     desenha() {
         planodefundo.desenha();
+        planodefundo.atualiza();
         chao.desenha();
         chao.atualiza();
         flappyBird.desenha();
         flappyBird.atualiza();
-        planodefundo.atualiza();
     },
     click() {
         flappyBird.pula();
