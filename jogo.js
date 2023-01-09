@@ -224,7 +224,7 @@ function loop() {
     contexto.fillRect(0, 0, canvas.width, canvas.height);
     telaativa.desenha();
     requestAnimationFrame(loop);
-    
+    animation_frame = animation_frame + 1;
 }
 
 
