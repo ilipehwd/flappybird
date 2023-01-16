@@ -9,6 +9,24 @@ som_morte.src = './som/punch.wav';
 let animation_frame = 0;
 
 
+function fazcolisaoobstaculo(par){
+    if(flappyBird.x >= par.x){
+        const alturacabeçafpb = flappyBird.y;
+        const alturapefpb = flappyBird.y + flappyBird.altura;
+        const bocacanoceuy = par.y + canos.altura;
+        const bocacanochaoy = par.y + canos.altura + canos.espacocanos;
+        if (alturacabeçafpb <= bocacanoceuy){
+            return true;
+        }
+        if(alturapefpb >= bocacanochaoy){
+            return true;
+        }
+    
+    }
+    return false;
+}
+
+
 const flappyBird = {
     spriteX: 0,
     spriteY: 0,
@@ -145,8 +163,8 @@ const canos = {
         spriteY: 169,
     },
     pares: [],
+    espacocanos: 120,
     desenha(){
-        const espacocanos = 80;
         for (i=0;i<canos.pares.length;i++){
             canos.ceu.x = canos.pares[i].x;
             canos.ceu.y = canos.pares[i].y;
@@ -162,7 +180,7 @@ const canos = {
 
         // Canos do chão
         const canochaox = canos.ceu.x;
-        const canochaoy = canos.altura + espacocanos + canos.ceu.y; 
+        const canochaoy = canos.altura + canos.espacocanos + canos.ceu.y; 
         contexto.drawImage(
             sprites,
             canos.chao.spriteX, canos.chao.spriteY,
@@ -172,19 +190,35 @@ const canos = {
         )
     }},
     atualiza() {
+        console.log("Número de obstáculos: " + canos.pares.length)
+        
         for(i=0;i<canos.pares.length;i++){
             const par = canos.pares[i];
             par.x = par.x - 2;
+
+            if(par.x +canos.largura <= 0){
+                canos.pares.shift();
+            }
+            if(fazcolisaoobstaculo(par)){
+                som_morte.play();
+                telaativa = telainicio;
+                return;
+            }
         }
+        
         const passou100frames = (animation_frame % 100 === 0);
         if(passou100frames){
             const novopar = {
                 x: canvas.width,
-                y: -150,
+                y: -150 * (Math.random() + 1),
 
             }
             canos.pares.push(novopar);
+            
         }
+        
+
+        
     }
 }
 const inicio = {
